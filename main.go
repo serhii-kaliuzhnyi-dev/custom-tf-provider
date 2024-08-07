@@ -8,8 +8,9 @@ import (
 	"flag"
 	"log"
 
+	"terraform-provider-hashicups/internal/provider"
+
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-	"github.com/hashicorp/terraform-provider-scaffolding-framework/internal/provider"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
@@ -20,7 +21,7 @@ import (
 
 // Run the docs generation tool, check its repository for more information on how it works and how docs
 // can be customized.
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate -provider-name scaffolding
+//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate -provider-name hashicups
 
 var (
 	// these will be set by the goreleaser configuration
@@ -38,16 +39,18 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		// TODO: Update this string with the published name of your provider.
-		// Also update the tfplugindocs generate command to either remove the
-		// -provider-name flag or set its value to the updated provider name.
-		Address: "registry.terraform.io/hashicorp/scaffolding",
-		Debug:   debug,
+			// NOTE: This is not a typical Terraform Registry provider address,
+			// such as registry.terraform.io/hashicorp/hashicups. This specific
+			// provider address is used in these tutorials in conjunction with a
+			// specific Terraform CLI configuration for manual development testing
+			// of this provider.
+			Address: "hashicorp.com/edu/hashicups",
+			Debug:   debug,
 	}
 
 	err := providerserver.Serve(context.Background(), provider.New(version), opts)
 
 	if err != nil {
-		log.Fatal(err.Error())
+			log.Fatal(err.Error())
 	}
 }
